@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.wearable.composestarter.presentation
+package com.climbingtrackerapp.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -26,14 +26,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import com.example.android.wearable.composestarter.R
-import com.example.android.wearable.composestarter.presentation.theme.WearAppTheme
+import com.climbingtrackerapp.presentation.theme.WearAppTheme
+
 
 /**
  * Simple "Hello, World" app meant as a starting point for a new project using Compose for Wear OS.
@@ -81,7 +80,7 @@ fun Greeting(greetingName: String) {
         modifier = Modifier.fillMaxWidth(),
         textAlign = TextAlign.Center,
         color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
+        text = "stringResource(R.string.hello_world, greetingName)"
     )
 }
 

@@ -22,7 +22,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.android.wearable.composestarter"
+        applicationId "com.climbingtrackerapp"
         minSdk 26
         targetSdk 30
         versionCode 1
