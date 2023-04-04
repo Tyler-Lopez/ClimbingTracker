@@ -8,3 +8,4 @@ enum class ClimbingType {
     TOP_ROPE_INDOOR,
     TOP_ROPE_OUTDOOR;
 }
+
