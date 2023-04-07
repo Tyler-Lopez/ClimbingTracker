@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
+import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
 import com.climbingtrackerapp.presentation.theme.WearAppTheme
 
 
@@ -35,7 +36,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            WearApp("Android")
+            SelectClimbingGrade()
+            //WearApp("Android")
         }
     }
 }

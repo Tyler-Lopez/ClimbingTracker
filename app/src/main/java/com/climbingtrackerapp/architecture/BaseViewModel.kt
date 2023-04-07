@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class BaseViewModel<TypeOfViewState : ViewState, TypeOfViewEvent : ViewEvent>
+abstract class BaseViewModel<TypeOfViewState : ViewState, TypeOfViewEvent : ViewEvent, TypeOfDestination: Destination>
     : ViewModel(), EventReceiver<TypeOfViewEvent>, StatePusher<TypeOfViewState> {
 
     private var lastDebouncedMs: Long = 0L
