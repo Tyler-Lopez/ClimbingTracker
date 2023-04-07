@@ -12,6 +12,8 @@
      limitations under the License.
 -->
 <resources>
+
+    <string name=""
     <string name="app_name">ComposeStarter</string>
     <!--
     This string is used for square devices and overridden by hello_world in
