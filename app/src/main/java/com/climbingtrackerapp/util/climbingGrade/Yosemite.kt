@@ -1,6 +1,11 @@
 package com.climbingtrackerapp.util.climbingGrade
 
 sealed interface Yosemite {
+    sealed interface Differentiation {
+        enum class PlusMinusType : Differentiation { BASE, MINUS, PLUS }
+        enum class AlphabetType : Differentiation { A, B, C, D }
+    }
+
     val differentiation: Differentiation
 
     data class FiveFour(override val differentiation: Differentiation.PlusMinusType) : Yosemite
@@ -15,11 +20,4 @@ sealed interface Yosemite {
     data class FiveThirteen(override val differentiation: Differentiation.AlphabetType) : Yosemite
     data class FiveFourteen(override val differentiation: Differentiation.AlphabetType) : Yosemite
     data class FiveFifteen(override val differentiation: Differentiation.AlphabetType) : Yosemite
-
-    companion object {
-        sealed interface Differentiation {
-            enum class PlusMinusType : Differentiation { BASE, MINUS, PLUS }
-            enum class AlphabetType : Differentiation { A, B, C, D }
-        }
-    }
 }
