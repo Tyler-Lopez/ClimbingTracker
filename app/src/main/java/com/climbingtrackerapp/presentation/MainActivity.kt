@@ -15,10 +15,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.climbingtrackerapp.architecture.Router
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
+import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewModel
 import com.climbingtrackerapp.presentation.theme.WearAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
@@ -32,20 +39,29 @@ import com.climbingtrackerapp.presentation.theme.WearAppTheme
  * back action). For more information, go here:
  * https://developer.android.com/reference/kotlin/androidx/wear/compose/navigation/package-summary
  */
-class MainActivity : ComponentActivity() {
+
+@AndroidEntryPoint
+class MainActivity : ComponentActivity(), Router<MainDestination> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
+            val navController = rememberSwipeDismissableNavController()
+            SwipeDismissableNavHost(
+                navController = navController,
+                startDestination = "select_climbing_grade"
             ) {
-                SelectClimbingGrade()
+                composable("select_climbing_grade") {
+                    SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
+
+                    })
+                }
             }
-            //WearApp("Android")
         }
+    }
+
+    override fun routeTo(destination: MainDestination) {
+        TODO("Not yet implemented")
     }
 }
 
