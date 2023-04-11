@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-abstract class BaseViewModel<TypeOfViewState : ViewState, TypeOfViewEvent : ViewEvent, TypeOfDestination: Destination>
-    : ViewModel(), EventReceiver<TypeOfViewEvent>, StatePusher<TypeOfViewState> {
+abstract class BaseViewModel<TypeOfViewState : ViewState, TypeOfViewEvent : ViewEvent, TypeOfDestination : Destination>
+    : ViewModel(), EventReceiver<TypeOfViewEvent>, StatePusher<TypeOfViewState>,
+    RouteSender<TypeOfDestination> {
 
+    private var routeReceiver: RouteReceiver<TypeOfDestination>? = null
     private var lastDebouncedMs: Long = 0L
     private val _viewState: MutableStateFlow<TypeOfViewState?> = MutableStateFlow(value = null)
     final override val viewState: StateFlow<TypeOfViewState?> = _viewState
@@ -15,12 +17,20 @@ abstract class BaseViewModel<TypeOfViewState : ViewState, TypeOfViewEvent : View
         _viewState.value = this
     }
 
+    final override fun push(destination: TypeOfDestination) {
+        routeReceiver?.onRoute(destination = destination)
+    }
+
     final override fun onEventDebounced(event: TypeOfViewEvent) {
         val currTime = System.currentTimeMillis()
         if (currTime > lastDebouncedMs + DEBOUNCE_TIME_MS) {
             lastDebouncedMs = currTime
-            onEvent(event)
+            onEvent(event = event)
         }
+    }
+
+    final override fun registerRouteReceiver(routeReceiver: RouteReceiver<TypeOfDestination>) {
+        this.routeReceiver = routeReceiver
     }
 
     companion object {

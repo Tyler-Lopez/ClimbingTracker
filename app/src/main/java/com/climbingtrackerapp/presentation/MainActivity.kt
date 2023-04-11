@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
@@ -21,7 +20,7 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
-import com.climbingtrackerapp.architecture.Router
+import com.climbingtrackerapp.architecture.RouteReceiver
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewModel
 import com.climbingtrackerapp.presentation.theme.WearAppTheme
@@ -41,7 +40,7 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity(), Router<MainDestination> {
+class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -53,14 +52,14 @@ class MainActivity : ComponentActivity(), Router<MainDestination> {
             ) {
                 composable("select_climbing_grade") {
                     SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
-
+                        registerRouteReceiver(routeReceiver = this@MainActivity)
                     })
                 }
             }
         }
     }
 
-    override fun routeTo(destination: MainDestination) {
+    override fun onRoute(destination: MainDestination) {
         TODO("Not yet implemented")
     }
 }

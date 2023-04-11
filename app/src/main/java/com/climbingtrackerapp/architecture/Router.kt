@@ -2,6 +2,11 @@ package com.climbingtrackerapp.architecture
 
 interface Destination
 
-interface Router<TypeOfDestination: Destination> {
-    fun routeTo(destination: TypeOfDestination)
+interface RouteReceiver<TypeOfDestination: Destination> {
+    fun onRoute(destination: TypeOfDestination)
+}
+
+interface RouteSender<TypeOfDestination: Destination> {
+    fun registerRouteReceiver(routeReceiver: RouteReceiver<TypeOfDestination>)
+    fun push(destination: TypeOfDestination)
 }
