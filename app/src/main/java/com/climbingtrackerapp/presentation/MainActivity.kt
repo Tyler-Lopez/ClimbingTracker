@@ -21,6 +21,8 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.climbingtrackerapp.architecture.RouteReceiver
+import com.climbingtrackerapp.presentation.screens.record.Record
+import com.climbingtrackerapp.presentation.screens.record.RecordViewModel
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewModel
 import com.climbingtrackerapp.presentation.theme.WearAppTheme
@@ -48,8 +50,13 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
             val navController = rememberSwipeDismissableNavController()
             SwipeDismissableNavHost(
                 navController = navController,
-                startDestination = "select_climbing_grade"
+                startDestination = "record"
             ) {
+                composable("record") {
+                    Record(viewModel = hiltViewModel<RecordViewModel>().apply {
+                        registerRouteReceiver(routeReceiver = this@MainActivity)
+                    })
+                }
                 composable("select_climbing_grade") {
                     SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
                         registerRouteReceiver(routeReceiver = this@MainActivity)
