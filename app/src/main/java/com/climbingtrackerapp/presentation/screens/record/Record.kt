@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.material.ScalingLazyColumn
 import com.climbingtrackerapp.architecture.EventReceiver
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun Record(viewModel: RecordViewModel) {
@@ -40,8 +41,11 @@ private fun RecordStandby(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Box() {
-
+            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = state.timeRecordedString.value,
+                    color = Color.White
+                )
             }
         }
         IconButton(
