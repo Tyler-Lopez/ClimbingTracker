@@ -3,7 +3,9 @@ package com.climbingtrackerapp.presentation.screens.record
 import android.graphics.Paint.Align
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PlayCircle
@@ -15,9 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.ScalingLazyColumn
+import androidx.wear.compose.material.Text
 import com.climbingtrackerapp.architecture.EventReceiver
 import java.time.format.DateTimeFormatter
 
@@ -32,45 +37,33 @@ fun Record(viewModel: RecordViewModel) {
 
 @Composable
 private fun RecordStandby(
-    state: RecordViewState.Standby,
-    eventReceiver: EventReceiver<RecordViewEvent>
+    state: RecordViewState.Standby, eventReceiver: EventReceiver<RecordViewEvent>
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.weight(1f, true),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = state.timeRecordedString.value,
-                    color = Color.White
-                )
-            }
-        }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(
+            text = state.timeRecordedString.value,
+            color = MaterialTheme.colors.onBackground
+        )
         IconButton(
             onClick = {
                 eventReceiver.onEvent(RecordViewEvent.ToggledRecording)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
+            }, modifier = Modifier
+                .clip(CircleShape)
                 .background(MaterialTheme.colors.primary)
         ) {
-            Box(
-                modifier = Modifier,
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = if (state.isRecording.value) {
-                        Icons.Default.Stop
-                    } else {
-                        Icons.Default.PlayArrow
-                    },
-                    contentDescription = null,
-                    tint = MaterialTheme.colors.onPrimary
-                )
-            }
+            Icon(
+                imageVector = if (state.isRecording.value) {
+                    Icons.Default.Stop
+                } else {
+                    Icons.Default.PlayArrow
+                },
+                contentDescription = null,
+                tint = MaterialTheme.colors.onPrimary
+            )
         }
     }
-
 }

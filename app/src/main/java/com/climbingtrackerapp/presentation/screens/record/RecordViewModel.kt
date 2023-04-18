@@ -3,6 +3,7 @@ package com.climbingtrackerapp.presentation.screens.record
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.climbingtrackerapp.architecture.BaseViewModel
 import com.climbingtrackerapp.presentation.MainDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,18 +13,18 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
     ssh: SavedStateHandle
 ) : BaseViewModel<RecordViewState, RecordViewEvent, MainDestination>() {
 
-
-    private var timeRecorded: Duration = INITIAL_DURATION
-        set(value) {
-            _timeRecordedString.value = value.format()
-            field = value
-        }
+    private var jobRecording: Job? = null
+    private var startedRecordingMs: Long? = null
 
     /** States observed in the view **/
     private val _isRecording: MutableState<Boolean> = mutableStateOf(value = false)
@@ -54,10 +55,29 @@ class RecordViewModel @Inject constructor(
 
     private fun onToggledRecording() {
         _isRecording.value = _isRecording.value.not()
+        // Reset duration
+        startedRecordingMs = null
+        // Cancel previous recording
+        jobRecording?.cancel()
+        // If now recording, reset time and begin incrementing
+        if (_isRecording.value) {
+            startedRecordingMs = System.currentTimeMillis()
+            jobRecording = viewModelScope.launch {
+                while (isActive) {
+                    startedRecordingMs?.let {
+                        _timeRecordedString.value = (System.currentTimeMillis() - it)
+                            .milliseconds
+                            .format()
+                    }
+                    delay(DELAY_UPDATE)
+                }
+            }
+        }
     }
 
     companion object {
         private val INITIAL_DURATION = 0.milliseconds
+        private val DELAY_UPDATE = 10.milliseconds
         private const val DURATION_FORMATTER_STRING = "%02d:%02d:%02d"
     }
 }

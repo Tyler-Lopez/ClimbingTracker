@@ -25,7 +25,8 @@ import com.climbingtrackerapp.presentation.screens.record.Record
 import com.climbingtrackerapp.presentation.screens.record.RecordViewModel
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewModel
-import com.climbingtrackerapp.presentation.theme.WearAppTheme
+import com.climbingtrackerapp.presentation.theme.Typography
+import com.climbingtrackerapp.presentation.theme.wearColorPalette
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -47,20 +48,26 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val navController = rememberSwipeDismissableNavController()
-            SwipeDismissableNavHost(
-                navController = navController,
-                startDestination = "record"
+            println("${MaterialTheme.colors}")
+            MaterialTheme(
+                colors = wearColorPalette, typography = Typography
             ) {
-                composable("record") {
-                    Record(viewModel = hiltViewModel<RecordViewModel>().apply {
-                        registerRouteReceiver(routeReceiver = this@MainActivity)
-                    })
-                }
-                composable("select_climbing_grade") {
-                    SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
-                        registerRouteReceiver(routeReceiver = this@MainActivity)
-                    })
+                println("after ${MaterialTheme.colors}")
+
+                val navController = rememberSwipeDismissableNavController()
+                SwipeDismissableNavHost(
+                    navController = navController, startDestination = "record"
+                ) {
+                    composable("record") {
+                        Record(viewModel = hiltViewModel<RecordViewModel>().apply {
+                            registerRouteReceiver(routeReceiver = this@MainActivity)
+                        })
+                    }
+                    composable("select_climbing_grade") {
+                        SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
+                            registerRouteReceiver(routeReceiver = this@MainActivity)
+                        })
+                    }
                 }
             }
         }
@@ -69,39 +76,4 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
     override fun onRoute(destination: MainDestination) {
         TODO("Not yet implemented")
     }
-}
-
-@Composable
-fun WearApp(greetingName: String) {
-    WearAppTheme {
-        /* If you have enough items in your list, use [ScalingLazyColumn] which is an optimized
-         * version of LazyColumn for wear devices with some added features. For more information,
-         * see d.android.com/wear/compose.
-         */
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background)
-                .selectableGroup(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Greeting(greetingName = greetingName)
-        }
-    }
-}
-
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = "stringResource(R.string.hello_world, greetingName)"
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }
