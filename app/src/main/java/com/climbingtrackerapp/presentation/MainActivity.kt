@@ -25,6 +25,8 @@ import com.climbingtrackerapp.presentation.screens.record.Record
 import com.climbingtrackerapp.presentation.screens.record.RecordViewModel
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewModel
+import com.climbingtrackerapp.presentation.screens.selectClimbingType.SelectClimbingType
+import com.climbingtrackerapp.presentation.screens.selectClimbingType.SelectClimbingTypeViewModel
 import com.climbingtrackerapp.presentation.theme.Typography
 import com.climbingtrackerapp.presentation.theme.wearColorPalette
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,6 +60,11 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
                 SwipeDismissableNavHost(
                     navController = navController, startDestination = "record"
                 ) {
+                    composable("select_climbing_type") {
+                        SelectClimbingType(viewModel = hiltViewModel<SelectClimbingTypeViewModel>().apply {
+                            registerRouteReceiver(routeReceiver = this@MainActivity)
+                        })
+                    }
                     composable("record") {
                         Record(viewModel = hiltViewModel<RecordViewModel>().apply {
                             registerRouteReceiver(routeReceiver = this@MainActivity)
