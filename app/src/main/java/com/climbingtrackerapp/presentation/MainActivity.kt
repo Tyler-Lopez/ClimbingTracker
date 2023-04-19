@@ -50,15 +50,13 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
         super.onCreate(savedInstanceState)
 
         setContent {
-            println("${MaterialTheme.colors}")
             MaterialTheme(
                 colors = wearColorPalette, typography = Typography
             ) {
-                println("after ${MaterialTheme.colors}")
-
                 val navController = rememberSwipeDismissableNavController()
                 SwipeDismissableNavHost(
-                    navController = navController, startDestination = "record"
+                    navController = navController,
+                    startDestination = "select_climbing_type"
                 ) {
                     composable("select_climbing_type") {
                         SelectClimbingType(viewModel = hiltViewModel<SelectClimbingTypeViewModel>().apply {
