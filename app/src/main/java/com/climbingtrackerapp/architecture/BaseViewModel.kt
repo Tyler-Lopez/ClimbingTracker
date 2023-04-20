@@ -17,8 +17,8 @@ abstract class BaseViewModel<TypeOfViewState : ViewState, TypeOfViewEvent : View
         _viewState.value = this
     }
 
-    final override fun push(destination: TypeOfDestination) {
-        routeReceiver?.onRoute(destination = destination)
+    final override fun TypeOfDestination.push() {
+        routeReceiver?.onRoute(destination = this)
     }
 
     final override fun onEventDebounced(event: TypeOfViewEvent) {

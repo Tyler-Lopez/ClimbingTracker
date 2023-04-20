@@ -8,5 +8,5 @@ interface RouteReceiver<TypeOfDestination: Destination> {
 
 interface RouteSender<TypeOfDestination: Destination> {
     fun registerRouteReceiver(routeReceiver: RouteReceiver<TypeOfDestination>)
-    fun push(destination: TypeOfDestination)
+    fun TypeOfDestination.push()
 }

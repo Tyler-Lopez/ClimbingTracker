@@ -20,6 +20,12 @@ class SelectClimbingTypeViewModel @Inject constructor(
     }
 
     override fun onEvent(event: SelectClimbingTypeViewEvent) {
-        TODO("Not yet implemented")
+        when (event) {
+            is SelectClimbingTypeViewEvent.ClimbingTypeSelected -> onClimbingTypeSelected(event)
+        }
+    }
+
+    private fun onClimbingTypeSelected(event: SelectClimbingTypeViewEvent.ClimbingTypeSelected) {
+        MainDestination.NavigateRecord(event.climbingType).push()
     }
 }

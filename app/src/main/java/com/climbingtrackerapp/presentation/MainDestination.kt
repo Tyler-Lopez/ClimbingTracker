@@ -1,5 +1,8 @@
 package com.climbingtrackerapp.presentation
 
 import com.climbingtrackerapp.architecture.Destination
+import com.climbingtrackerapp.util.climbingGrade.ClimbingType
 
-sealed class MainDestination : Destination
+sealed interface MainDestination : Destination {
+    data class NavigateRecord(val climbingType: ClimbingType) : MainDestination
+}

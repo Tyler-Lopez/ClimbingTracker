@@ -15,9 +15,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.SwipeDismissableNavHostState
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.climbingtrackerapp.architecture.RouteReceiver
@@ -46,9 +48,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
+
+    private lateinit var navController: NavHostController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             MaterialTheme(
                 colors = wearColorPalette, typography = Typography
@@ -79,6 +83,12 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
     }
 
     override fun onRoute(destination: MainDestination) {
-        TODO("Not yet implemented")
+        when (destination) {
+            is MainDestination.NavigateRecord -> onNavigateRecord(destination)
+        }
+    }
+
+    private fun onNavigateRecord(destination: MainDestination.NavigateRecord) {
+        navController.navigate("record")
     }
 }
