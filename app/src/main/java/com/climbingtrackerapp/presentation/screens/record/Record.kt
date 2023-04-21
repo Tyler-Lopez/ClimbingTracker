@@ -1,8 +1,11 @@
 package com.climbingtrackerapp.presentation.screens.record
 
 import android.graphics.Paint.Align
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -20,25 +23,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.*
 import com.climbingtrackerapp.architecture.EventReceiver
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun Record(viewModel: RecordViewModel) {
+fun Record(
+    swipeToDismissBoxState: SwipeToDismissBoxState,
+    viewModel: RecordViewModel
+) {
     viewModel.viewState.collectAsState().value?.apply {
         when (this) {
-            is RecordViewState.Standby -> RecordStandby(state = this, eventReceiver = viewModel)
+            is RecordViewState.Standby -> RecordStandby(
+                state = this,
+                swipeToDismissBoxState = swipeToDismissBoxState,
+                eventReceiver = viewModel
+            )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun RecordStandby(
-    state: RecordViewState.Standby, eventReceiver: EventReceiver<RecordViewEvent>
+    state: RecordViewState.Standby,
+    swipeToDismissBoxState: SwipeToDismissBoxState,
+    eventReceiver: EventReceiver<RecordViewEvent>
 ) {
+    val pagerState = rememberPagerState()
+    // Box {
+    Box(
+        modifier = Modifier.edgeSwipeToDismiss(
+            swipeToDismissBoxState = swipeToDismissBoxState,
+            edgeWidth = 90.dp
+        )
+    ) {
+        HorizontalPager(
+            pageCount = 2,
+            state = pagerState
+        ) {
+            Text(
+                text = "$it Current page is $it",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+    //  }
+    /*
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -66,4 +97,6 @@ private fun RecordStandby(
             )
         }
     }
+
+     */
 }

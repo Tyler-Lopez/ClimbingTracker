@@ -17,7 +17,13 @@ fun SelectClimbingType(viewModel: SelectClimbingTypeViewModel) {
                 ScalingLazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(types) {
                         Button(
-                            onClick = {}
+                            onClick = {
+                                viewModel.onEventDebounced(
+                                    SelectClimbingTypeViewEvent.ClimbingTypeSelected(
+                                        it
+                                    )
+                                )
+                            }
                         ) {
                             Text(
                                 text = it.toString()

@@ -3,25 +3,14 @@ package com.climbingtrackerapp.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.wear.compose.navigation.SwipeDismissableNavHostState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.navigation.SwipeDismissableNavHost
-import androidx.wear.compose.navigation.SwipeDismissableNavHostState
-import androidx.wear.compose.navigation.composable
-import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.compose.material.rememberSwipeToDismissBoxState
+import androidx.wear.compose.material.SwipeToDismissBoxState
+import androidx.wear.compose.navigation.*
 import com.climbingtrackerapp.architecture.RouteReceiver
 import com.climbingtrackerapp.presentation.screens.record.Record
 import com.climbingtrackerapp.presentation.screens.record.RecordViewModel
@@ -55,11 +44,30 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme(
-                colors = wearColorPalette, typography = Typography
+                colors = wearColorPalette,
+                typography = Typography
             ) {
-                val navController = rememberSwipeDismissableNavController()
+                /** The reason for externally creating the [SwipeToDismissBoxState] and constructing
+                 * the [SwipeDismissableNavHostState] with it is to enable the swipe-dismiss gesture
+                 * atop horizontal scrolling.
+                 *
+                 * It still does not seem to work perfectly, and crashes for me when there is nothing
+                 * in the backstack. I've created an issue but otherwise cannot use the HorizontalPager
+                 * until it is fixed.
+                 *
+                 * @see
+                 * https://issuetracker.google.com/issues/218663790
+                 * https://issuetracker.google.com/issues/228336555
+                 * https://issuetracker.google.com/issues/279014600 // My issue
+                 * **/
+                rememberSwipeDismissableNavController()
+                navController = rememberSwipeDismissableNavController()
+                val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
+                val swipeToDismissNavHostState = rememberSwipeDismissableNavHostState(swipeToDismissBoxState)
+
                 SwipeDismissableNavHost(
                     navController = navController,
+                    state = swipeToDismissNavHostState,
                     startDestination = "select_climbing_type"
                 ) {
                     composable("select_climbing_type") {
@@ -68,9 +76,12 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
                         })
                     }
                     composable("record") {
-                        Record(viewModel = hiltViewModel<RecordViewModel>().apply {
-                            registerRouteReceiver(routeReceiver = this@MainActivity)
-                        })
+                        Record(
+                            swipeToDismissBoxState = swipeToDismissBoxState,
+                            viewModel = hiltViewModel<RecordViewModel>().apply {
+                                registerRouteReceiver(routeReceiver = this@MainActivity)
+                            }
+                        )
                     }
                     composable("select_climbing_grade") {
                         SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
@@ -89,6 +100,10 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
     }
 
     private fun onNavigateRecord(destination: MainDestination.NavigateRecord) {
-        navController.navigate("record")
+        navController.navigate("record") {
+            popUpTo("select_climbing_type") {
+                inclusive = true
+            }
+        }
     }
 }
