@@ -77,7 +77,6 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
                     }
                     composable("record") {
                         Record(
-                            swipeToDismissBoxState = swipeToDismissBoxState,
                             viewModel = hiltViewModel<RecordViewModel>().apply {
                                 registerRouteReceiver(routeReceiver = this@MainActivity)
                             }
