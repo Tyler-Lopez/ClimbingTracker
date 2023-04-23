@@ -88,6 +88,11 @@ private fun RecordStandby(
                     .fillMaxHeight()
                     .width(width = 2.dp)
             )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .width(width = 2.dp)
+            )
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier

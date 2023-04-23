@@ -27,7 +27,7 @@ class RecordViewModel @Inject constructor(
     private var startedRecordingMs: Long? = null
 
     /** States observed in the view **/
-    private val _isRecording: MutableState<Boolean> = mutableStateOf(value = false)
+    private val _isRecording: MutableState<Boolean> = mutableStateOf(value = true)
     private val _timeRecordedString: MutableState<String> = mutableStateOf(
         value = INITIAL_DURATION.format()
     )
