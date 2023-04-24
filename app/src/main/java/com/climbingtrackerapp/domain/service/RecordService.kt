@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
-import com.climbingtrackerapp.domain.repository.RecordedActivityRepository
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
@@ -28,7 +27,7 @@ class RecordService @Inject constructor(
     val recordedActivityLength: StateFlow<Duration> = _recordedActivityLength
 
     init {
-        recordedActivityRepository.reco
+      //  recordedActivityRepository.reco
     }
 
     override fun onCreate() {
