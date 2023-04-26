@@ -49,7 +49,7 @@ private fun RecordStandby(
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = state.timeRecordedString.value,
+            text = state.timeRecordedString.collectAsState().value,
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.caption1
         )

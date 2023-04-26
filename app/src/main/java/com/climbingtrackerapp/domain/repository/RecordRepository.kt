@@ -1,11 +1,7 @@
 package com.climbingtrackerapp.domain.repository
 
-import android.content.Context
-import androidx.lifecycle.MutableLiveData
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
 import kotlin.time.Duration
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 interface RecordRepository {
     /** When true, any service listening to this repository should start, otherwise it should be

@@ -7,16 +7,20 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import com.climbingtrackerapp.domain.repository.RecordRepository
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.ZERO
 import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class RecordService @Inject constructor(
-    private val recordedActivityRepository: RecordedActivityRepository,
+    private val recordRepository: RecordRepository,
     private val notificationBuilder: NotificationCompat.Builder
 ) : LifecycleService() {
 

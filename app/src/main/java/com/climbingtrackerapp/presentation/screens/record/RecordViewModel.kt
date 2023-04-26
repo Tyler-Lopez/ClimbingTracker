@@ -41,10 +41,13 @@ class RecordViewModel @Inject constructor(
     }
 
     init {
+        /*
         RecordViewState.Standby(
             isRecording = _isRecording,
             timeRecordedString = _timeRecordedString
         ).push()
+
+         */
     }
 
     override fun onEvent(event: RecordViewEvent) {
