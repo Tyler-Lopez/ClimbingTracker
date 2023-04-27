@@ -14,8 +14,7 @@ import androidx.wear.compose.navigation.*
 import com.climbingtrackerapp.architecture.RouteReceiver
 import com.climbingtrackerapp.presentation.screens.record.Record
 import com.climbingtrackerapp.presentation.screens.record.RecordViewModel
-import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
-import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewModel
+import com.climbingtrackerapp.presentation.screens.record.subscreen.SelectClimbingGrade
 import com.climbingtrackerapp.presentation.screens.selectClimbingType.SelectClimbingType
 import com.climbingtrackerapp.presentation.screens.selectClimbingType.SelectClimbingTypeViewModel
 import com.climbingtrackerapp.presentation.theme.Typography
@@ -83,7 +82,7 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
                         )
                     }
                     composable("select_climbing_grade") {
-                        SelectClimbingGrade(viewModel = hiltViewModel<SelectClimbingGradeViewModel>().apply {
+                        SelectClimbingGrade(viewModel = hiltViewModel<RecordViewModel>().apply {
                             registerRouteReceiver(routeReceiver = this@MainActivity)
                         })
                     }
@@ -95,6 +94,7 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
     override fun onRoute(destination: MainDestination) {
         when (destination) {
             is MainDestination.NavigateRecord -> onNavigateRecord(destination)
+            is MainDestination.NavigateSelectClimbingGrade -> onNavigateSelectClimbingGrade()
         }
     }
 
@@ -104,5 +104,9 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
                 inclusive = true
             }
         }
+    }
+
+    private fun onNavigateSelectClimbingGrade() {
+        navController.navigate("select_climbing_grade")
     }
 }

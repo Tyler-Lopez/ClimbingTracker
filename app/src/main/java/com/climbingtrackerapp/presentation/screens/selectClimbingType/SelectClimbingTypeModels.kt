@@ -2,8 +2,6 @@ package com.climbingtrackerapp.presentation.screens.selectClimbingType
 
 import com.climbingtrackerapp.architecture.ViewEvent
 import com.climbingtrackerapp.architecture.ViewState
-import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewEvent
-import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewState
 import com.climbingtrackerapp.util.climbingGrade.ClimbingType
 
 sealed interface SelectClimbingTypeViewState : ViewState {
