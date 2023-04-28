@@ -14,6 +14,5 @@ sealed interface RecordViewState : ViewState {
 }
 
 sealed interface RecordViewEvent : ViewEvent {
-    object ClickedAddClimb : RecordViewEvent
     object ToggledRecording : RecordViewEvent
 }
