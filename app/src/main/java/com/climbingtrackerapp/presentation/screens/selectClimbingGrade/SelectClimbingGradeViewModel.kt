@@ -4,6 +4,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import com.climbingtrackerapp.architecture.BaseViewModel
+import com.climbingtrackerapp.domain.repository.RecordRepository
 import com.climbingtrackerapp.presentation.MainDestination
 import com.climbingtrackerapp.util.climbingGrade.Yosemite
 import com.climbingtrackerapp.util.climbingGrade.YosemiteListFactory
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SelectClimbingGradeViewModel @Inject constructor(
+    private val recordRepository: RecordRepository,
     yosemiteListFactory: YosemiteListFactory,
     ssh: SavedStateHandle
 ) : BaseViewModel<SelectClimbingGradeViewState, SelectClimbingGradeViewEvent, MainDestination>() {
@@ -26,6 +28,13 @@ class SelectClimbingGradeViewModel @Inject constructor(
     }
 
     override fun onEvent(event: SelectClimbingGradeViewEvent) {
-        TODO("Not yet implemented")
+        when (event) {
+            is SelectClimbingGradeViewEvent.ClickedClimbingGrade -> onClickedClimbingGrade(event)
+        }
+    }
+
+    private fun onClickedClimbingGrade(event: SelectClimbingGradeViewEvent.ClickedClimbingGrade) {
+        println("here on clicked climbing grade")
+        MainDestination.NavigateUp.push()
     }
 }

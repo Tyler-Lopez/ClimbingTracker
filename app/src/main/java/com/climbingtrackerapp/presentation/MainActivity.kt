@@ -94,15 +94,28 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
 
     override fun onRoute(destination: MainDestination) {
         when (destination) {
-            is MainDestination.NavigateRecord -> onNavigateRecord(destination)
+            is MainDestination.NavigateRecord -> navigateRecord(destination)
+            is MainDestination.NavigateSelectClimbingGrade -> navigateSelectClimbingGrade(destination)
+            is MainDestination.NavigateUp -> navigateUp()
         }
     }
 
-    private fun onNavigateRecord(destination: MainDestination.NavigateRecord) {
+    private fun navigateRecord(destination: MainDestination.NavigateRecord) {
         navController.navigate("record") {
             popUpTo("select_climbing_type") {
                 inclusive = true
             }
         }
     }
+
+    private fun navigateSelectClimbingGrade(destination: MainDestination.NavigateSelectClimbingGrade) {
+        navController.navigate("select_climbing_grade")
+    }
+
+
+    private fun navigateUp() {
+        navController.navigateUp()
+    }
+
+
 }

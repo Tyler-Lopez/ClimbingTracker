@@ -19,4 +19,6 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+
+    <string name="climbing_grade_type_yosemite_pattern">5.%d%c</string>
 </resources>

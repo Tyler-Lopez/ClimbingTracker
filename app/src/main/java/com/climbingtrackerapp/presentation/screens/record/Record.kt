@@ -105,7 +105,13 @@ private fun RecordStandby(
                         )
                     )
                     .background(MaterialTheme.colors.primary)
-                    .clickable { }
+                    .clickable {
+                        if (state.isRecording.value) {
+                            eventReceiver.onEventDebounced(RecordViewEvent.ClickedAddClimb)
+                        } else {
+                         //   "End Activity"
+                        }
+                    }
             ) {
                 Text(
                     modifier = Modifier.padding(8.dp),
