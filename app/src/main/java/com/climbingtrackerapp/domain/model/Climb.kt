@@ -1,7 +1,8 @@
 package com.climbingtrackerapp.domain.model
 
-import androidx.compose.runtime.Composable
+import java.time.Duration
 
-interface Climb {
-
-}
+data class Climb(
+    val duration: Duration,
+    val grade: ClimbGrade
+)

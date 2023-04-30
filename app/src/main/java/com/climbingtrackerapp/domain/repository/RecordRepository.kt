@@ -1,15 +1,16 @@
 package com.climbingtrackerapp.domain.repository
 
+import com.climbingtrackerapp.domain.model.Climb
 import kotlin.time.Duration
 import kotlinx.coroutines.flow.StateFlow
 
 interface RecordRepository {
-    /** When true, any service listening to this repository should start, otherwise it should be
-     * stopped. **/
-    val isRecording: StateFlow<Boolean>
+    val climbInProgress: StateFlow<Climb>
+    val climbsCount: StateFlow<Int>
 
-    /** The length of the recorded activity **/
-    val recordedActivityLength: StateFlow<Duration>
-
-    fun updateActivityLength(newLength: Duration)
+    fun startClimb(climb: Climb)
+    fun startClimbSession()
+    fun stopClimbInProgressFell()
+    fun stopClimbInProgressSent()
+    fun stopClimbSession()
 }

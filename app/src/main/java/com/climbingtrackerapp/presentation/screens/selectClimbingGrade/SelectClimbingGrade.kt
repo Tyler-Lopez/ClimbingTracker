@@ -1,11 +1,16 @@
 package com.climbingtrackerapp.presentation.screens.selectClimbingGrade
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.wear.compose.material.Card
-import androidx.wear.compose.material.ScalingLazyColumn
-import androidx.wear.compose.material.Text
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.*
+import androidx.wear.compose.material.*
 import com.climbingtrackerapp.architecture.EventReceiver
 import com.climbingtrackerapp.util.climbingGrade.Yosemite
 
@@ -14,8 +19,7 @@ fun SelectClimbingGrade(viewModel: SelectClimbingGradeViewModel) {
     viewModel.viewState.collectAsState().value?.apply {
         when (this) {
             is SelectClimbingGradeViewState.Standby -> SelectClimbingGradeList(
-                yosemiteList = yosemiteList,
-                eventReceiver = viewModel
+                yosemiteList = yosemiteList, eventReceiver = viewModel
             )
         }
     }
@@ -23,25 +27,23 @@ fun SelectClimbingGrade(viewModel: SelectClimbingGradeViewModel) {
 
 @Composable
 fun SelectClimbingGradeList(
-    yosemiteList: List<Yosemite>,
-    eventReceiver: EventReceiver<SelectClimbingGradeViewEvent>
+    yosemiteList: List<Yosemite>, eventReceiver: EventReceiver<SelectClimbingGradeViewEvent>
 ) {
-    ScalingLazyColumn {
-        println("here")
+    ScalingLazyColumn(modifier = Modifier.fillMaxSize()) {
         items(yosemiteList.size) {
             val climb = yosemiteList[it]
-            Card(onClick = {
-                println("here, on clicked")
-                val climbingGrade = yosemiteList[it]
+            Button(modifier = Modifier
+                .fillMaxWidth()
+                .height(32.dp), onClick = {
                 eventReceiver.onEventDebounced(
                     SelectClimbingGradeViewEvent.ClickedClimbingGrade(
-                        grade = climbingGrade
+                        grade = climb
                     )
                 )
             }) {
                 Text(
-                    text = climb.toString(),
-                    color = Color.White
+                    text = climb.toString(withDifferentiation = true),
+                    style = MaterialTheme.typography.button
                 )
             }
         }

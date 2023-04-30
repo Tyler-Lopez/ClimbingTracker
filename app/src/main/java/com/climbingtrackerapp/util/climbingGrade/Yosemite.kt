@@ -1,10 +1,10 @@
 package com.climbingtrackerapp.util.climbingGrade
 
-import com.climbingtrackerapp.domain.model.Climb
+import com.climbingtrackerapp.domain.model.ClimbGrade
 
-sealed class Yosemite : Climb {
+sealed class Yosemite : ClimbGrade {
     sealed interface Differentiation {
-        enum class PlusMinusType : Differentiation { BASE, MINUS, PLUS }
+        enum class PlusMinusType : Differentiation { MINUS, BASE, PLUS }
         enum class AlphabetType : Differentiation { A, B, C, D }
     }
 
@@ -23,7 +23,7 @@ sealed class Yosemite : Climb {
     data class FiveFourteen(override val differentiation: Differentiation.AlphabetType) : Yosemite()
     data class FiveFifteen(override val differentiation: Differentiation.AlphabetType) : Yosemite()
 
-    override fun toString(): String {
+    fun toString(withDifferentiation: Boolean): String {
         return buildString {
             append("5.")
             append(
@@ -42,16 +42,18 @@ sealed class Yosemite : Climb {
                     is FiveFifteen -> 15
                 }
             )
-            val differentiation: Char? = when (differentiation) {
-                Differentiation.AlphabetType.A -> 'a'
-                Differentiation.AlphabetType.B -> 'b'
-                Differentiation.AlphabetType.C -> 'c'
-                Differentiation.AlphabetType.D -> 'd'
-                Differentiation.PlusMinusType.BASE -> null
-                Differentiation.PlusMinusType.MINUS -> '-'
-                Differentiation.PlusMinusType.PLUS -> '+'
+            if (withDifferentiation) {
+                val differentiation: Char? = when (differentiation) {
+                    Differentiation.AlphabetType.A -> 'a'
+                    Differentiation.AlphabetType.B -> 'b'
+                    Differentiation.AlphabetType.C -> 'c'
+                    Differentiation.AlphabetType.D -> 'd'
+                    Differentiation.PlusMinusType.BASE -> null
+                    Differentiation.PlusMinusType.MINUS -> '-'
+                    Differentiation.PlusMinusType.PLUS -> '+'
+                }
+                differentiation?.let { append(it) }
             }
-            differentiation?.let { append(it) }
         }
     }
 }

@@ -8,6 +8,7 @@ import com.climbingtrackerapp.architecture.BaseViewModel
 import com.climbingtrackerapp.domain.repository.RecordRepository
 import com.climbingtrackerapp.presentation.MainDestination
 import com.climbingtrackerapp.util.climbingGrade.ClimbingType
+import com.climbingtrackerapp.util.climbingGrade.Yosemite
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -47,10 +48,15 @@ class RecordViewModel @Inject constructor(
     }
 
     init {
+        /*
+        RecordViewState.Climbing(
+            Yosemite.FiveSeven(Yosemite.Differentiation.PlusMinusType.BASE)
+        ).push()
+        */
         RecordViewState.Standby(
             isRecording = _isRecording,
             timeRecordedString = recordRepository.recordedActivityLength
-                .map { "" }
+                .map { "00:00:00" } // todo, actually map
                 .stateIn(
                     scope = viewModelScope,
                     started = SharingStarted.Eagerly,
@@ -62,6 +68,8 @@ class RecordViewModel @Inject constructor(
     override fun onEvent(event: RecordViewEvent) {
         when (event) {
             is RecordViewEvent.ClickedAddClimb -> onClickedAddClimb()
+            is RecordViewEvent.ClickedFell -> onClickedFell()
+            is RecordViewEvent.ClickedSent -> onClickedSent()
             is RecordViewEvent.ToggledRecording -> onToggledRecording()
         }
     }
@@ -71,6 +79,14 @@ class RecordViewModel @Inject constructor(
             // todo
             climbingType = ClimbingType.INDOOR_TOP_ROPE
         ).push()
+    }
+
+    private fun onClickedFell() {
+
+    }
+
+    private fun onClickedSent() {
+
     }
 
     private fun onToggledRecording() {
