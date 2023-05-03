@@ -78,11 +78,9 @@ fun RecordStandby(
                     )
                     .background(MaterialTheme.colors.primary)
                     .clickable {
-                        if (state.isRecording.value) {
-                            eventReceiver.onEventDebounced(RecordViewEvent.ClickedAddClimb)
-                        } else {
-                            //   "End Activity"
-                        }
+                        eventReceiver.onEventDebounced(
+                            event = RecordViewEvent.ClickedAddClimb
+                        )
                     }
             ) {
                 Text(

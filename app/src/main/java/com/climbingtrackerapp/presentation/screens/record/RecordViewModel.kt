@@ -1,32 +1,29 @@
 package com.climbingtrackerapp.presentation.screens.record
 
+import android.app.Application
+import android.content.Intent
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.climbingtrackerapp.architecture.BaseViewModel
-import com.climbingtrackerapp.domain.repository.RecordRepository
 import com.climbingtrackerapp.presentation.MainDestination
+import com.climbingtrackerapp.service.RecordService
+import com.climbingtrackerapp.service.RecordServiceActionType
+import com.climbingtrackerapp.service.RecordServiceState
 import com.climbingtrackerapp.util.climbingGrade.ClimbingType
-import com.climbingtrackerapp.util.climbingGrade.Yosemite
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RecordViewModel @Inject constructor(
-    private val recordRepository: RecordRepository,
+    private val application: Application,
     ssh: SavedStateHandle
 ) : BaseViewModel<RecordViewState, RecordViewEvent, MainDestination>() {
 
@@ -53,16 +50,29 @@ class RecordViewModel @Inject constructor(
             Yosemite.FiveSeven(Yosemite.Differentiation.PlusMinusType.BASE)
         ).push()
         */
-        RecordViewState.Standby(
-            isRecording = _isRecording,
-            timeRecordedString = recordRepository.recordedActivityLength
-                .map { "00:00:00" } // todo, actually map
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.Eagerly,
-                    initialValue = "00:00:00"
-                )
-        ).push()
+        viewModelScope.launch {
+            RecordService.recordServiceStates.collect {
+                println("Here, trying to collect... collected is $it")
+                when (it) {
+                    is RecordServiceState.Climbing -> {
+                        if (it.climbInProgress != null) {
+                            RecordViewState.Climbing(
+                                climbGrade = it.climbInProgress.grade
+                            ).push()
+                        } else {
+                            RecordViewState.Standby(
+                                climbCount = it.climbs.size
+                            ).push()
+                        }
+                    }
+                    is RecordServiceState.Standby -> {
+                        sendCommandToRecordService(
+                            action = RecordServiceActionType.ACTION_START_SERVICE
+                        )
+                    }
+                }
+            }
+        }
     }
 
     override fun onEvent(event: RecordViewEvent) {
@@ -108,6 +118,18 @@ class RecordViewModel @Inject constructor(
                     delay(DELAY_UPDATE)
                 }
             }
+        }
+    }
+
+    private fun sendCommandToRecordService(
+        action: RecordServiceActionType,
+        intentScope: (Intent.() -> Unit)? = null
+    ) {
+        val context = application.applicationContext
+        Intent(context, RecordService::class.java).apply {
+            this.action = action.toString()
+            intentScope?.invoke(this)
+            context.startForegroundService(this)
         }
     }
 

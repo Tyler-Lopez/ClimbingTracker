@@ -117,5 +117,8 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
         navController.navigateUp()
     }
 
+    private fun sendCommandToService() {
+
+    }
 
 }

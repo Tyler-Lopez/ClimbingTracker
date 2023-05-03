@@ -13,8 +13,7 @@ sealed interface RecordViewState : ViewState {
     ) : RecordViewState
 
     data class Standby(
-        val isRecording: State<Boolean>,
-        val timeRecordedString: StateFlow<String>
+        val climbCount: Int
     ) : RecordViewState
 }
 
