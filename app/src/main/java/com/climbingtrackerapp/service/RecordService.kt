@@ -12,14 +12,20 @@ import androidx.lifecycle.LifecycleService
 import com.climbingtrackerapp.domain.model.Climb
 import com.climbingtrackerapp.util.climbingGrade.Yosemite
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.Duration
+import kotlin.time.Duration
+import java.util.Collections.copy
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class RecordService : LifecycleService() {
 
+    private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+    private var climbSessionDurationIncrementerJob: Job? = null
+    private var climbCurrentDurationIncrementerJob: Job? = null
 
     @Inject
     lateinit var notificationBuilder: NotificationCompat.Builder
@@ -28,30 +34,42 @@ class RecordService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         println("Here, start command happened ${intent?.action}")
         intent?.let {
-            val actionType = it.action?.run { RecordServiceActionType.valueOf(this) }
-                ?: error("Missing action!")
+            val actionType =
+                it.action?.run { RecordServiceActionType.valueOf(this) } ?: error("Missing action!")
             when (actionType) {
                 RecordServiceActionType.ACTION_START_SERVICE -> {
                     val notificationManager =
                         getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     val channel = NotificationChannel(
-                        NOTIFICATION_CHANNEL_ID,
-                        NOTIFICATION_CHANNEL_NAME,
-                        IMPORTANCE_DEFAULT
+                        NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME, IMPORTANCE_DEFAULT
                     )
                     notificationManager.createNotificationChannel(channel)
                     startForeground(NOTIFICATION_ID, notificationBuilder.build())
                     recordServiceStatesMutable.value = RecordServiceState.Climbing()
+                    climbSessionDurationIncrementerJob = coroutineScope.launch {
+                        while (true) {
+                            (recordServiceStatesMutable.value as? RecordServiceState.Climbing)?.run {
+                                recordServiceStatesMutable.value = copy(
+                                    climbingSession = climbingSession.copy(
+                                        duration = (System.currentTimeMillis() - climbingSession.startedOnUnixMs)
+                                            .milliseconds,
+                                    )
+                                )
+                            }
+                            delay(100.milliseconds)
+                        }
+                    }
                 }
                 RecordServiceActionType.ACTION_STOP_SERVICE -> {
+                    climbSessionDurationIncrementerJob?.cancel()
+                    climbSessionDurationIncrementerJob = null
                     stopForeground(STOP_FOREGROUND_DETACH)
                     stopSelf()
                 }
                 RecordServiceActionType.ACTION_START_CLIMB -> {
                     val grade = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         it.getParcelableExtra(
-                            ACTION_START_CLIMB_EXTRA_GRADE,
-                            Yosemite::class.java
+                            ACTION_START_CLIMB_EXTRA_GRADE, Yosemite::class.java
                         )
                     } else {
                         it.getParcelableExtra(
@@ -62,16 +80,44 @@ class RecordService : LifecycleService() {
                         recordServiceStatesMutable.value = copy(
                             climbInProgress = Climb(
                                 duration = Duration.ZERO,
-                                grade = grade
+                                grade = grade,
+                                sent = false,
+                                startedOnUnixMs = System.currentTimeMillis()
                             )
                         )
                     }
                 }
                 RecordServiceActionType.ACTION_STOP_CLIMB_FELL -> {
-
+                    (recordServiceStatesMutable.value as RecordServiceState.Climbing).run {
+                        recordServiceStatesMutable.value =
+                            copy(climbInProgress = null, climbingSession = climbingSession.run {
+                                copy(climbs = climbs.toMutableList().apply {
+                                    climbInProgress?.let { newClimb ->
+                                        add(
+                                            newClimb.copy(
+                                                sent = true
+                                            )
+                                        )
+                                    }
+                                })
+                            })
+                    }
                 }
                 RecordServiceActionType.ACTION_STOP_CLIMB_SENT -> {
-
+                    (recordServiceStatesMutable.value as RecordServiceState.Climbing).run {
+                        recordServiceStatesMutable.value =
+                            copy(climbInProgress = null, climbingSession = climbingSession.run {
+                                copy(climbs = climbs.toMutableList().apply {
+                                    climbInProgress?.let { newClimb ->
+                                        add(
+                                            newClimb.copy(
+                                                sent = true
+                                            )
+                                        )
+                                    }
+                                })
+                            })
+                    }
                 }
             }
         }

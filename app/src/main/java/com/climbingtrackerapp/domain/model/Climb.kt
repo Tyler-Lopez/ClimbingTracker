@@ -1,8 +1,10 @@
 package com.climbingtrackerapp.domain.model
 
-import java.time.Duration
+import kotlin.time.Duration
 
 data class Climb(
     val duration: Duration,
-    val grade: ClimbGrade
+    val grade: ClimbGrade,
+    val sent: Boolean,
+    val startedOnUnixMs: Long,
 )

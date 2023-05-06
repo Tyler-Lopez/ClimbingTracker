@@ -31,6 +31,11 @@ fun RecordStandby(
             .padding(all = 16.dp)
     ) {
         Text(
+            text = state.climbingSessionLength,
+            color = MaterialTheme.colors.onBackground,
+            style = MaterialTheme.typography.caption2
+        )
+        Text(
             text = "Indoor Top Rope",
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.caption2
@@ -92,7 +97,7 @@ fun RecordStandby(
             }
         }
         Text(
-            text = "0 climbs in this activity",
+            text = "${state.climbCount} climbs in this activity",
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.caption3
         )

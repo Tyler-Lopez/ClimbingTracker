@@ -21,8 +21,7 @@ import com.climbingtrackerapp.util.climbingGrade.Yosemite
 
 @Composable
 fun RecordClimbing(
-    state: RecordViewState.Climbing,
-    eventReceiver: EventReceiver<RecordViewEvent>
+    state: RecordViewState.Climbing, eventReceiver: EventReceiver<RecordViewEvent>
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,29 +45,25 @@ fun RecordClimbing(
                 .fillMaxWidth()
                 .height(height = 52.dp)
         ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
+            Column(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(weight = 1f, fill = true)
                     .clip(
                         AbsoluteRoundedCornerShape(
-                            topLeft = 4.dp,
-                            bottomLeft = 4.dp
+                            topLeft = 4.dp, bottomLeft = 4.dp
                         )
                     )
                     .background(Color(99, 24, 24))
-                    .clickable { eventReceiver.onEvent(RecordViewEvent.ToggledRecording) }
-            ) {
+                    .clickable { eventReceiver.onEvent(RecordViewEvent.ClickedFell) }) {
                 Icon(
                     imageVector = Icons.Outlined.Cancel,
                     contentDescription = null,
                     tint = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    text = "Fell",
-                    style = MaterialTheme.typography.button
+                    text = "Fell", style = MaterialTheme.typography.button
                 )
             }
             Spacer(
@@ -76,29 +71,29 @@ fun RecordClimbing(
                     .fillMaxHeight()
                     .width(width = 2.dp)
             )
-            Column(
-                verticalArrangement = Arrangement.Center,
+            Column(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxHeight()
                     .weight(weight = 1f, fill = true)
                     .clip(
                         AbsoluteRoundedCornerShape(
-                            topRight = 4.dp,
-                            bottomRight = 4.dp
+                            topRight = 4.dp, bottomRight = 4.dp
                         )
                     )
                     .background(Color(43, 99, 24))
-                    .clickable { eventReceiver.onEvent(RecordViewEvent.ToggledRecording) }
-            ) {
+                    .clickable {
+                        eventReceiver.onEventDebounced(
+                            RecordViewEvent.ClickedSent
+                        )
+                    }) {
                 Icon(
                     imageVector = Icons.Outlined.Check,
                     contentDescription = null,
                     tint = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    text = "Sent",
-                    style = MaterialTheme.typography.button
+                    text = "Sent", style = MaterialTheme.typography.button
                 )
             }
         }

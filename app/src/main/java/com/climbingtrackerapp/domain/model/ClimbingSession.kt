@@ -1,8 +1,9 @@
 package com.climbingtrackerapp.domain.model
 
-import java.time.Duration
+import kotlin.time.Duration
 
-interface ClimbingSession {
-    val duration: Duration
-    val climbs: List<Climb>
-}
+data class ClimbingSession(
+    val climbs: List<Climb>,
+    val duration: Duration,
+    val startedOnUnixMs: Long
+)

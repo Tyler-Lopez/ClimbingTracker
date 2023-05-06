@@ -8,11 +8,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 sealed interface RecordViewState : ViewState {
     data class Climbing(
-        val climbGrade: ClimbGrade,
-       // val timeRecordedString: StateFlow<String>
+        val climbGrade: ClimbGrade
+        // val timeRecordedString: StateFlow<String>
     ) : RecordViewState
 
     data class Standby(
+        val climbingSessionLength: String,
         val climbCount: Int
     ) : RecordViewState
 }

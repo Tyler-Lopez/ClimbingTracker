@@ -57,11 +57,12 @@ class RecordViewModel @Inject constructor(
                     is RecordServiceState.Climbing -> {
                         if (it.climbInProgress != null) {
                             RecordViewState.Climbing(
-                                climbGrade = it.climbInProgress.grade
+                                climbGrade = it.climbInProgress.grade,
                             ).push()
                         } else {
                             RecordViewState.Standby(
-                                climbCount = it.climbs.size
+                                climbingSessionLength = it.climbingSession.duration.format(),
+                                climbCount = it.climbingSession.climbs.count()
                             ).push()
                         }
                     }
@@ -92,11 +93,15 @@ class RecordViewModel @Inject constructor(
     }
 
     private fun onClickedFell() {
-
+        sendCommandToRecordService(
+            action = RecordServiceActionType.ACTION_STOP_CLIMB_FELL
+        )
     }
 
     private fun onClickedSent() {
-
+        sendCommandToRecordService(
+            action = RecordServiceActionType.ACTION_STOP_CLIMB_SENT
+        )
     }
 
     private fun onToggledRecording() {
