@@ -86,8 +86,22 @@ class RecordService : LifecycleService() {
                             )
                         )
                     }
+                    climbCurrentDurationIncrementerJob = coroutineScope.launch {
+                        while (true) {
+                            (recordServiceStatesMutable.value as? RecordServiceState.Climbing)?.run {
+                                recordServiceStatesMutable.value = copy(
+                                    climbInProgress = climbInProgress?.copy(
+                                        duration = (System.currentTimeMillis() - climbInProgress.startedOnUnixMs)
+                                            .milliseconds,
+                                    )
+                                )
+                            }
+                            delay(100.milliseconds)
+                        }
+                    }
                 }
                 RecordServiceActionType.ACTION_STOP_CLIMB_FELL -> {
+                    climbCurrentDurationIncrementerJob?.cancel()
                     (recordServiceStatesMutable.value as RecordServiceState.Climbing).run {
                         recordServiceStatesMutable.value =
                             copy(climbInProgress = null, climbingSession = climbingSession.run {
@@ -104,6 +118,7 @@ class RecordService : LifecycleService() {
                     }
                 }
                 RecordServiceActionType.ACTION_STOP_CLIMB_SENT -> {
+                    climbCurrentDurationIncrementerJob?.cancel()
                     (recordServiceStatesMutable.value as RecordServiceState.Climbing).run {
                         recordServiceStatesMutable.value =
                             copy(climbInProgress = null, climbingSession = climbingSession.run {
