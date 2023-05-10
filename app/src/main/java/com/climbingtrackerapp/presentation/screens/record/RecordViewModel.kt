@@ -61,7 +61,11 @@ class RecordViewModel @Inject constructor(
                             ).push()
                         } else {
                             RecordViewState.Standby(
-                                climbingSessionLength = it.climbingSession.duration.format(),
+                                climbingSessionLength = it
+                                    .climbingSession
+                                    .lengthMs
+                                    .milliseconds
+                                    .format(),
                                 climbCount = it.climbingSession.climbs.count()
                             ).push()
                         }

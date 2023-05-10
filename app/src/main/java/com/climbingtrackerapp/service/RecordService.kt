@@ -108,11 +108,7 @@ class RecordService : LifecycleService() {
                             copy(climbInProgress = null, climbingSession = climbingSession.run {
                                 copy(climbs = climbs.toMutableList().apply {
                                     climbInProgress?.let { newClimb ->
-                                        add(
-                                            newClimb.copy(
-                                                sent = true
-                                            )
-                                        )
+                                        add(newClimb.copy(sent = true))
                                     }
                                 })
                             })
