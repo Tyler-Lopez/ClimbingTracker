@@ -10,7 +10,7 @@ sealed interface RecordServiceState {
         val climbInProgress: Climb? = null,
         val climbingSession: ClimbingSession = ClimbingSession(
             climbs = listOf(),
-            duration = Duration.ZERO,
+            lengthMs = 0L,
             startedOnUnixMs = System.currentTimeMillis()
         )
     ) : RecordServiceState

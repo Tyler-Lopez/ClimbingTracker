@@ -4,7 +4,7 @@ import com.climbingtrackerapp.architecture.ViewEvent
 import com.climbingtrackerapp.architecture.ViewState
 
 sealed interface EndClimbViewState : ViewState {
-
+    object Standby : EndClimbViewState
 }
 
 sealed interface EndClimbViewEvent : ViewEvent {

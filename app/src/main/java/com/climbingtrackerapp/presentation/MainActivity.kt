@@ -12,6 +12,8 @@ import androidx.wear.compose.material.rememberSwipeToDismissBoxState
 import androidx.wear.compose.material.SwipeToDismissBoxState
 import androidx.wear.compose.navigation.*
 import com.climbingtrackerapp.architecture.RouteReceiver
+import com.climbingtrackerapp.presentation.screens.endClimb.EndClimb
+import com.climbingtrackerapp.presentation.screens.endClimb.EndClimbViewModel
 import com.climbingtrackerapp.presentation.screens.record.Record
 import com.climbingtrackerapp.presentation.screens.record.RecordViewModel
 import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGrade
@@ -70,6 +72,11 @@ class MainActivity : ComponentActivity(), RouteReceiver<MainDestination> {
                     state = swipeToDismissNavHostState,
                     startDestination = "select_climbing_type"
                 ) {
+                    composable("end_climb") {
+                        EndClimb(viewModel = hiltViewModel<EndClimbViewModel>().apply {
+                            registerRouteReceiver(routeReceiver = this@MainActivity)
+                        })
+                    }
                     composable("select_climbing_type") {
                         SelectClimbingType(viewModel = hiltViewModel<SelectClimbingTypeViewModel>().apply {
                             registerRouteReceiver(routeReceiver = this@MainActivity)

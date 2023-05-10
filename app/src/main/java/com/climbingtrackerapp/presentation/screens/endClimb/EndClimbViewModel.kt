@@ -11,7 +11,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EndClimbViewModel @Inject constructor(
-    private val application: Application,
     ssh: SavedStateHandle
 ) : BaseViewModel<EndClimbViewState, EndClimbViewEvent, MainDestination>() {
     override fun onEvent(event: EndClimbViewEvent) {
