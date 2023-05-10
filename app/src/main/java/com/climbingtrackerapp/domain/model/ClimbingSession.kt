@@ -4,6 +4,6 @@ import kotlin.time.Duration
 
 data class ClimbingSession(
     val climbs: List<Climb>,
-    val duration: Duration,
+    val lengthMs: Long,
     val startedOnUnixMs: Long
 )

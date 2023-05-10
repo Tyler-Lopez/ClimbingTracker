@@ -47,16 +47,16 @@ class RecordService : LifecycleService() {
                     startForeground(NOTIFICATION_ID, notificationBuilder.build())
                     recordServiceStatesMutable.value = RecordServiceState.Climbing()
                     climbSessionDurationIncrementerJob = coroutineScope.launch {
-                        while (true) {
+                        while (isActive) {
                             (recordServiceStatesMutable.value as? RecordServiceState.Climbing)?.run {
+                                val currMs = System.currentTimeMillis()
+                                val newLength = currMs - climbingSession.startedOnUnixMs
+                                val newClimbingSession = climbingSession.copy(lengthMs = newLength)
                                 recordServiceStatesMutable.value = copy(
-                                    climbingSession = climbingSession.copy(
-                                        duration = (System.currentTimeMillis() - climbingSession.startedOnUnixMs)
-                                            .milliseconds,
-                                    )
+                                    climbingSession = newClimbingSession
                                 )
                             }
-                            delay(100.milliseconds)
+                            delay(LOOP_DELAY_MILLISECONDS)
                         }
                     }
                 }
@@ -79,24 +79,25 @@ class RecordService : LifecycleService() {
                     (recordServiceStatesMutable.value as? RecordServiceState.Climbing)?.run {
                         recordServiceStatesMutable.value = copy(
                             climbInProgress = Climb(
-                                duration = Duration.ZERO,
                                 grade = grade,
+                                lengthMs = ZERO_MILLISECONDS,
                                 sent = false,
-                                startedOnUnixMs = System.currentTimeMillis()
+                                startedOnUnixMs = System.currentTimeMillis(),
+                                trackPoints = listOf()
                             )
                         )
                     }
                     climbCurrentDurationIncrementerJob = coroutineScope.launch {
-                        while (true) {
+                        while (isActive) {
                             (recordServiceStatesMutable.value as? RecordServiceState.Climbing)?.run {
-                                recordServiceStatesMutable.value = copy(
-                                    climbInProgress = climbInProgress?.copy(
-                                        duration = (System.currentTimeMillis() - climbInProgress.startedOnUnixMs)
-                                            .milliseconds,
-                                    )
-                                )
+                                val newClimb = climbInProgress?.let { currClimb ->
+                                    val currMs = System.currentTimeMillis()
+                                    val newLength = currMs - currClimb.lengthMs
+                                    currClimb.copy(lengthMs = newLength)
+                                }
+                                recordServiceStatesMutable.value = copy(climbInProgress = newClimb)
                             }
-                            delay(100.milliseconds)
+                            delay(LOOP_DELAY_MILLISECONDS)
                         }
                     }
                 }
@@ -154,6 +155,9 @@ class RecordService : LifecycleService() {
         const val NOTIFICATION_CHANNEL_ID = "ClimbingTracker Channel"
         const val NOTIFICATION_CHANNEL_NAME = "ClimbingTracker"
         const val NOTIFICATION_ID = 1
+
+        private const val ZERO_MILLISECONDS = 0L
+        private const val LOOP_DELAY_MILLISECONDS = 100L
     }
 
 
