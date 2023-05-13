@@ -56,7 +56,7 @@ fun RecordStandby(
                         )
                     )
                     .background(MaterialTheme.colors.primary)
-                    .clickable { eventReceiver.onEvent(RecordViewEvent.ToggledRecording) }
+                    .clickable { eventReceiver.onEvent(RecordViewEvent.ClickedEndClimbSession) }
             ) {
                 Icon(
                     modifier = Modifier.padding(8.dp),

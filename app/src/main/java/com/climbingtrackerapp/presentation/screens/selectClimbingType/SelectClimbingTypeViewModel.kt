@@ -3,10 +3,7 @@ package com.climbingtrackerapp.presentation.screens.selectClimbingType
 import androidx.lifecycle.SavedStateHandle
 import com.climbingtrackerapp.architecture.BaseViewModel
 import com.climbingtrackerapp.presentation.MainDestination
-import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewEvent
-import com.climbingtrackerapp.presentation.screens.selectClimbingGrade.SelectClimbingGradeViewState
-import com.climbingtrackerapp.util.climbingGrade.ClimbingType
-import com.climbingtrackerapp.util.climbingGrade.YosemiteListFactory
+import com.climbingtrackerapp.domain.model.ClimbType
 import javax.inject.Inject
 
 class SelectClimbingTypeViewModel @Inject constructor(
@@ -15,7 +12,7 @@ class SelectClimbingTypeViewModel @Inject constructor(
 
     init {
         SelectClimbingTypeViewState.Standby(
-            types = ClimbingType.values().toList()
+            types = ClimbType.values().toList()
         ).push()
     }
 

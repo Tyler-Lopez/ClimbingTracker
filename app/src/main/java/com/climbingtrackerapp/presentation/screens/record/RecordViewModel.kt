@@ -11,14 +11,12 @@ import com.climbingtrackerapp.presentation.MainDestination
 import com.climbingtrackerapp.service.RecordService
 import com.climbingtrackerapp.service.RecordServiceActionType
 import com.climbingtrackerapp.service.RecordServiceState
-import com.climbingtrackerapp.util.climbingGrade.ClimbingType
+import com.climbingtrackerapp.domain.model.ClimbType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -83,17 +81,21 @@ class RecordViewModel @Inject constructor(
     override fun onEvent(event: RecordViewEvent) {
         when (event) {
             is RecordViewEvent.ClickedAddClimb -> onClickedAddClimb()
+            is RecordViewEvent.ClickedEndClimbSession -> onClickedEndClimbSession()
             is RecordViewEvent.ClickedFell -> onClickedFell()
             is RecordViewEvent.ClickedSent -> onClickedSent()
-            is RecordViewEvent.ToggledRecording -> onToggledRecording()
         }
     }
 
     private fun onClickedAddClimb() {
         MainDestination.NavigateSelectClimbingGrade(
             // todo
-            climbingType = ClimbingType.INDOOR_TOP_ROPE
+            climbingType = ClimbType.INDOOR_TOP_ROPE
         ).push()
+    }
+
+    private fun onClickedEndClimbSession() {
+        MainDestination.NavigateEndClimb.push()
     }
 
     private fun onClickedFell() {
@@ -106,28 +108,6 @@ class RecordViewModel @Inject constructor(
         sendCommandToRecordService(
             action = RecordServiceActionType.ACTION_STOP_CLIMB_SENT
         )
-    }
-
-    private fun onToggledRecording() {
-        _isRecording.value = _isRecording.value.not()
-        // Reset duration
-        startedRecordingMs = null
-        // Cancel previous recording
-        jobRecording?.cancel()
-        // If now recording, reset time and begin incrementing
-        if (_isRecording.value) {
-            startedRecordingMs = System.currentTimeMillis()
-            jobRecording = viewModelScope.launch {
-                while (isActive) {
-                    startedRecordingMs?.let {
-                        _timeRecordedString.value = (System.currentTimeMillis() - it)
-                            .milliseconds
-                            .format()
-                    }
-                    delay(DELAY_UPDATE)
-                }
-            }
-        }
     }
 
     private fun sendCommandToRecordService(

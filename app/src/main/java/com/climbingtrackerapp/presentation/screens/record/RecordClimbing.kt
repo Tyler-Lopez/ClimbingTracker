@@ -8,6 +8,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.ThumbDown
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +60,7 @@ fun RecordClimbing(
                     .background(Color(99, 24, 24))
                     .clickable { eventReceiver.onEvent(RecordViewEvent.ClickedFell) }) {
                 Icon(
-                    imageVector = Icons.Outlined.Cancel,
+                    imageVector = Icons.Outlined.ThumbDown,
                     contentDescription = null,
                     tint = MaterialTheme.colors.onPrimary
                 )
@@ -88,7 +90,7 @@ fun RecordClimbing(
                         )
                     }) {
                 Icon(
-                    imageVector = Icons.Outlined.Check,
+                    imageVector = Icons.Outlined.ThumbUp,
                     contentDescription = null,
                     tint = MaterialTheme.colors.onPrimary
                 )

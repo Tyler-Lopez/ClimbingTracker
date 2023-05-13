@@ -13,6 +13,11 @@ import javax.inject.Inject
 class EndClimbViewModel @Inject constructor(
     ssh: SavedStateHandle
 ) : BaseViewModel<EndClimbViewState, EndClimbViewEvent, MainDestination>() {
+
+    init {
+        EndClimbViewState.Standby.push()
+    }
+
     override fun onEvent(event: EndClimbViewEvent) {
         TODO("Not yet implemented")
     }

@@ -8,5 +8,6 @@ sealed interface EndClimbViewState : ViewState {
 }
 
 sealed interface EndClimbViewEvent : ViewEvent {
-
+    object ClickedCancel : EndClimbViewEvent
+    object ClickedConfirmEndClimb : EndClimbViewEvent
 }

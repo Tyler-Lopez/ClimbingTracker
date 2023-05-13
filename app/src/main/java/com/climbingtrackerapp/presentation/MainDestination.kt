@@ -1,10 +1,12 @@
 package com.climbingtrackerapp.presentation
 
 import com.climbingtrackerapp.architecture.Destination
-import com.climbingtrackerapp.util.climbingGrade.ClimbingType
+import com.climbingtrackerapp.domain.model.ClimbType
 
 sealed interface MainDestination : Destination {
-    data class NavigateSelectClimbingGrade(val climbingType: ClimbingType) : MainDestination
-    data class NavigateRecord(val climbingType: ClimbingType) : MainDestination
+    object NavigateSelectClimbingType : MainDestination
+    object NavigateEndClimb : MainDestination
+    data class NavigateSelectClimbingGrade(val climbingType: ClimbType) : MainDestination
+    data class NavigateRecord(val climbingType: ClimbType) : MainDestination
     object NavigateUp : MainDestination
 }

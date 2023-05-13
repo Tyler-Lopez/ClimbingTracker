@@ -45,7 +45,7 @@ private fun EndClimbStandby() {
             style = MaterialTheme.typography.caption3
         )
         Text(
-            text = "temp",
+            text = "End climbing session?",
             //   text = "${(state.climbGrade as Yosemite)!!.toString(true)} Climb in Progress",
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.caption2
@@ -76,7 +76,7 @@ private fun EndClimbStandby() {
                     tint = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    text = "Fell", style = MaterialTheme.typography.button
+                    text = "Cancel", style = MaterialTheme.typography.button
                 )
             }
             Spacer(
@@ -104,7 +104,7 @@ private fun EndClimbStandby() {
                     tint = MaterialTheme.colors.onPrimary
                 )
                 Text(
-                    text = "Sent", style = MaterialTheme.typography.button
+                    text = "End", style = MaterialTheme.typography.button
                 )
             }
         }
