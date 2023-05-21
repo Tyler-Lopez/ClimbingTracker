@@ -1,14 +1,12 @@
 package com.climbingtrackerapp.presentation.screens.record
 
-import androidx.compose.runtime.State
 import com.climbingtrackerapp.architecture.ViewEvent
 import com.climbingtrackerapp.architecture.ViewState
-import com.climbingtrackerapp.domain.model.ClimbGrade
-import kotlinx.coroutines.flow.StateFlow
+import com.climbingtrackerapp.domain.model.climbSpecification.ClimbSpecification
 
 sealed interface RecordViewState : ViewState {
     data class Climbing(
-        val climbGrade: ClimbGrade
+        val climbSpecification: ClimbSpecification
         // val timeRecordedString: StateFlow<String>
     ) : RecordViewState
 

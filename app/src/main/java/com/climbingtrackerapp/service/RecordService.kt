@@ -3,19 +3,15 @@ package com.climbingtrackerapp.service
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_DEFAULT
-import android.app.NotificationManager.IMPORTANCE_LOW
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import com.climbingtrackerapp.domain.model.Climb
-import com.climbingtrackerapp.util.climbingGrade.Yosemite
+import com.climbingtrackerapp.domain.model.climbSpecification.ClimbSpecification
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.time.Duration
-import java.util.Collections.copy
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.milliseconds
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -69,7 +65,7 @@ class RecordService : LifecycleService() {
                 RecordServiceActionType.ACTION_START_CLIMB -> {
                     val grade = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         it.getParcelableExtra(
-                            ACTION_START_CLIMB_EXTRA_GRADE, Yosemite::class.java
+                            ACTION_START_CLIMB_EXTRA_GRADE, ClimbSpecification::class.java
                         )
                     } else {
                         it.getParcelableExtra(
@@ -79,7 +75,8 @@ class RecordService : LifecycleService() {
                     (recordServiceStatesMutable.value as? RecordServiceState.Climbing)?.run {
                         recordServiceStatesMutable.value = copy(
                             climbInProgress = Climb(
-                                grade = grade,
+                                climbScore = grade.score,
+                                climbType = grade.climbType,
                                 lengthMs = ZERO_MILLISECONDS,
                                 sent = false,
                                 startedOnUnixMs = System.currentTimeMillis(),

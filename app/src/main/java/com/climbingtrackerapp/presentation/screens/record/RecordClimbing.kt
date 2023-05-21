@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.AbsoluteRoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.ThumbDown
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.runtime.Composable
@@ -38,7 +36,7 @@ fun RecordClimbing(
             style = MaterialTheme.typography.caption3
         )
         Text(
-            text = "${(state.climbGrade as Yosemite)!!.toString(true)} Climb in Progress",
+            text = "${(state.climbSpecification as Yosemite)!!.toString(true)} Climb in Progress",
             color = MaterialTheme.colors.onBackground,
             style = MaterialTheme.typography.caption2
         )

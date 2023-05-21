@@ -1,7 +1,7 @@
 package com.climbingtrackerapp.di
 
-import com.climbingtrackerapp.util.climbingGrade.YosemiteListFactory
-import com.climbingtrackerapp.util.climbingGrade.YosemiteListFactoryImpl
+import com.climbingtrackerapp.domain.model.climbListFactory.ClimbGradeSpecificationListFactory
+import com.climbingtrackerapp.domain.model.climbListFactory.ClimbSpecificationGradeSpecificationFactoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,5 +11,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object AppModule {
     @Provides
-    fun provideYosemiteListFactory(): YosemiteListFactory = YosemiteListFactoryImpl()
+    fun provideYosemiteListFactory(): ClimbGradeSpecificationListFactory = ClimbSpecificationGradeSpecificationFactoryImpl()
 }

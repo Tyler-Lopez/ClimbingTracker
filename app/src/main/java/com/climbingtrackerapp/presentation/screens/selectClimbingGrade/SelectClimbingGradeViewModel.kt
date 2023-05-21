@@ -10,21 +10,21 @@ import com.climbingtrackerapp.presentation.MainDestination
 import com.climbingtrackerapp.service.RecordService
 import com.climbingtrackerapp.service.RecordServiceActionType
 import com.climbingtrackerapp.util.climbingGrade.Yosemite
-import com.climbingtrackerapp.util.climbingGrade.YosemiteListFactory
+import com.climbingtrackerapp.domain.model.climbListFactory.ClimbGradeSpecificationListFactory
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class SelectClimbingGradeViewModel @Inject constructor(
     private val application: Application,
-    yosemiteListFactory: YosemiteListFactory,
+    climbSpecificationFactory: ClimbGradeSpecificationListFactory,
     ssh: SavedStateHandle
 ) : BaseViewModel<SelectClimbingGradeViewState, SelectClimbingGradeViewEvent, MainDestination>() {
 
     private val _yosemiteList: SnapshotStateList<Yosemite>
 
     init {
-        _yosemiteList = yosemiteListFactory
+        _yosemiteList = climbSpecificationFactory
             .create(firstDecimal = 4, lastDecimal = 12)
             .toMutableStateList()
         SelectClimbingGradeViewState.Standby(yosemiteList = _yosemiteList).push()

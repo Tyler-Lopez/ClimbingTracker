@@ -55,7 +55,7 @@ class RecordViewModel @Inject constructor(
                     is RecordServiceState.Climbing -> {
                         if (it.climbInProgress != null) {
                             RecordViewState.Climbing(
-                                climbGrade = it.climbInProgress.grade,
+                                climbSpecification = it.climbInProgress.grade,
                             ).push()
                         } else {
                             RecordViewState.Standby(

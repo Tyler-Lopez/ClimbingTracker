@@ -1,12 +1,15 @@
 package com.climbingtrackerapp.util.climbingGrade
 
 import android.os.Parcelable
-import com.climbingtrackerapp.domain.model.ClimbGrade
+import com.climbingtrackerapp.domain.model.climbSpecification.ClimbSpecification
+import com.climbingtrackerapp.domain.model.ClimbType
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 
 @Parcelize
-sealed class Yosemite : ClimbGrade, Parcelable {
+sealed class Yosemite : ClimbSpecification, Parcelable {
+
+    override val climbType: ClimbType = ClimbType.INDOOR_TOP_ROPE
+
     sealed interface Differentiation {
         enum class PlusMinusType : Differentiation { MINUS, BASE, PLUS }
         enum class AlphabetType : Differentiation { A, B, C, D }
